@@ -16,6 +16,9 @@ set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
         mainwindow.h
+        data/account.h
+        repo/configrepo.h
+        repo/configrepo.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
