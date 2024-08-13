@@ -5,9 +5,11 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QListView>
-
+#include <QScopedPointer>
+#include <QComboBox>
 
 #include "repo/configrepo.h"
+#include "repo/command.h"
 
 class MainWindow : public QMainWindow
 {
@@ -20,13 +22,18 @@ public:
 private:
     QWidget *centerWidget = nullptr;
     QVBoxLayout *mainLayout = nullptr;
-    QListView *accountView = nullptr;
-    QStringListModel *model = nullptr;
+
+    QScopedPointer<QComboBox> accountComboBox;
+    QScopedPointer<QPushButton> accountButton;
+    QScopedPointer<QHBoxLayout> accountLayout;
 
     ConfigReopostory *configRepo = nullptr;
+    QScopedPointer<Command> command;
 
     void init();
     void initUI(QWidget *parent);
+
     void showAccount();
+    void onAccountButtonClicked();
 };
 #endif // MAINWINDOW_H

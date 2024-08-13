@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QDebug>
+#include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,6 +23,7 @@ MainWindow::~MainWindow()
 void MainWindow::init()
 {
     configRepo = new ConfigReopostory();
+    command.reset(new Command());
     QString configPath = QDir::homePath() + "/Documents/self/qt_project/adb_tool/config/config.json";
     configRepo->readConfig(configPath);
 }
@@ -40,8 +42,27 @@ void MainWindow::initUI(QWidget *parent)
 
 void MainWindow::showAccount()
 {
-    accountView = new QListView();
-    accountView->setModel(configRepo->getUserListModel());
-    accountView->show();
-    mainLayout->addWidget(accountView);
+    accountLayout.reset(new QHBoxLayout());
+    accountButton.reset(new QPushButton("input"));
+    accountComboBox.reset(new QComboBox());
+
+    foreach (const QString &userName, *configRepo->getUserNameList())
+    {
+        accountComboBox->addItem(userName);
+    }
+    accountLayout.data()->addWidget(accountComboBox.data());
+    accountLayout.data()->addWidget(accountButton.data());
+    mainLayout->addLayout(accountLayout.data());
+
+    connect(accountButton.data(), &QPushButton::clicked, this, &MainWindow::onAccountButtonClicked);
+}
+
+void MainWindow::onAccountButtonClicked()
+{
+    qDebug() << "onAccountButtonClicked";
+    QList<QString> devices = command->getDevices();
+    foreach (const QString &device, devices)
+    {
+        qDebug() << device;
+    }
 }

@@ -33,18 +33,17 @@ void ConfigReopostory::readConfig(const QString &path)
     {
         QJsonObject accountObj = value.toObject();
         qDebug() << "accountObj username: " << accountObj["username"].toString() << " password : " << accountObj["password"].toString();
-         QSharedPointer<Account> account(new Account(accountObj["username"].toString(), accountObj["password"].toString()));
-          accounts.append(account);
+        QSharedPointer<Account> account(new Account(accountObj["username"].toString(), accountObj["password"].toString()));
+        accounts.append(account);
     }
 }
 
-QStringListModel* ConfigReopostory::getUserListModel()
+QStringList *ConfigReopostory::getUserNameList()
 {
     userNameList.clear();
     for (const QSharedPointer<Account> &account : accounts)
     {
         userNameList.append(account->email);
     }
-    userListModel.setStringList(userNameList);
-    return &userListModel;
+    return &userNameList;
 }

@@ -19,6 +19,8 @@ set(PROJECT_SOURCES
         data/account.h
         repo/configrepo.h
         repo/configrepo.cpp
+        repo/command.h
+        repo/command.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

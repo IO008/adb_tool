@@ -15,14 +15,14 @@ class ConfigReopostory
 private:
     QList<QSharedPointer<Account>> accounts;
     QStringList userNameList;
-    QStringListModel userListModel;
 
 public:
     ConfigReopostory();
     ~ConfigReopostory();
 
     void readConfig(const QString &path);
-    QStringListModel* getUserListModel();
+
+    QStringList *getUserNameList();
 };
 
 #endif
