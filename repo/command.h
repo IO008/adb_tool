@@ -15,6 +15,11 @@ public:
     ~Command();
 
     QList<QString> getDevices();
+
+    void inputText(QString device, QString text);
+    void keyEvent(QString device, QString key);
+    void nextFocus(QString device);
+    void hideKeyboard(QString device);
 };
 
 #endif

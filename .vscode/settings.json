@@ -58,6 +58,7 @@
         "variant": "cpp",
         "vector": "cpp",
         "algorithm": "cpp",
-        "qsharedpointer": "cpp"
+        "qsharedpointer": "cpp",
+        "qstring": "cpp"
     }
 }

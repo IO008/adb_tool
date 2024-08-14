@@ -23,6 +23,7 @@ public:
     void readConfig(const QString &path);
 
     QStringList *getUserNameList();
+    QString getPassword(const QString &username);
 };
 
 #endif

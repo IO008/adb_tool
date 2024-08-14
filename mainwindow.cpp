@@ -24,6 +24,7 @@ void MainWindow::init()
 {
     configRepo = new ConfigReopostory();
     command.reset(new Command());
+
     QString configPath = QDir::homePath() + "/Documents/self/qt_project/adb_tool/config/config.json";
     configRepo->readConfig(configPath);
 }
@@ -33,8 +34,10 @@ void MainWindow::initUI(QWidget *parent)
     centerWidget = new QWidget();
     mainLayout = new QVBoxLayout(centerWidget);
 
+    showDevices();
     showAccount();
 
+    mainLayout->addStretch();
     centerWidget->setLayout(mainLayout);
 
     setCentralWidget(centerWidget);
@@ -42,7 +45,7 @@ void MainWindow::initUI(QWidget *parent)
 
 void MainWindow::showAccount()
 {
-    accountLayout.reset(new QHBoxLayout());
+    accountContainer.reset(new QHBoxLayout());
     accountButton.reset(new QPushButton("input"));
     accountComboBox.reset(new QComboBox());
 
@@ -50,19 +53,51 @@ void MainWindow::showAccount()
     {
         accountComboBox->addItem(userName);
     }
-    accountLayout.data()->addWidget(accountComboBox.data());
-    accountLayout.data()->addWidget(accountButton.data());
-    mainLayout->addLayout(accountLayout.data());
+    accountContainer.data()->addWidget(accountComboBox.data());
+    accountContainer.data()->addWidget(accountButton.data());
+    mainLayout->addLayout(accountContainer.data());
+
+    accountContainer->addStretch();
 
     connect(accountButton.data(), &QPushButton::clicked, this, &MainWindow::onAccountButtonClicked);
 }
 
 void MainWindow::onAccountButtonClicked()
 {
-    qDebug() << "onAccountButtonClicked";
+    command->nextFocus(deviceComboBox->currentText());
+    command->inputText(deviceComboBox->currentText(), accountComboBox->currentText());
+    command->nextFocus(deviceComboBox->currentText());
+    command->inputText(deviceComboBox->currentText(), configRepo->getPassword(accountComboBox->currentText()));
+    command->hideKeyboard(deviceComboBox->currentText());
+}
+
+void MainWindow::showDevices()
+{
+    deviceContainer.reset(new QHBoxLayout());
+    deviceComboBox.reset(new QComboBox());
+    refreshDeviceButton.reset(new QPushButton("refresh"));
+
+    QList<QString> devices = command->getDevices();
+
+    foreach (const QString &device, devices)
+    {
+        deviceComboBox->addItem(device);
+    }
+    deviceContainer->addWidget(deviceComboBox.data());
+    deviceContainer->addWidget(refreshDeviceButton.data());
+
+    deviceContainer->addStretch();
+    mainLayout->addLayout(deviceContainer.data());
+
+    connect(refreshDeviceButton.data(), &QPushButton::clicked, this, &MainWindow::onRefreshDevicesClicked);
+}
+
+void MainWindow::onRefreshDevicesClicked()
+{
+    deviceComboBox->clear();
     QList<QString> devices = command->getDevices();
     foreach (const QString &device, devices)
     {
-        qDebug() << device;
+        deviceComboBox->addItem(device);
     }
 }

@@ -47,3 +47,15 @@ QStringList *ConfigReopostory::getUserNameList()
     }
     return &userNameList;
 }
+
+QString ConfigReopostory::getPassword(const QString &username)
+{
+    for (const QSharedPointer<Account> &account : accounts)
+    {
+        if (account->email == username)
+        {
+            return account->password;
+        }
+    }
+    return "";
+}

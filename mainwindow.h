@@ -25,7 +25,11 @@ private:
 
     QScopedPointer<QComboBox> accountComboBox;
     QScopedPointer<QPushButton> accountButton;
-    QScopedPointer<QHBoxLayout> accountLayout;
+    QScopedPointer<QHBoxLayout> accountContainer;
+
+    QScopedPointer<QHBoxLayout> deviceContainer;
+    QScopedPointer<QComboBox> deviceComboBox;
+    QScopedPointer<QPushButton> refreshDeviceButton;
 
     ConfigReopostory *configRepo = nullptr;
     QScopedPointer<Command> command;
@@ -35,5 +39,8 @@ private:
 
     void showAccount();
     void onAccountButtonClicked();
+
+    void showDevices();
+    void onRefreshDevicesClicked();
 };
 #endif // MAINWINDOW_H
