@@ -22,6 +22,8 @@ public:
     void hideKeyboard(QString device);
     void debugFragment(QString device);
     void deeplink(QString device, QString text, QString packageName);
+    void customCommand(QString device, QString command);
+    void uninstall(QString device, QString packageName);
 };
 
 #endif

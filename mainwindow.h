@@ -25,17 +25,25 @@ private:
     QVBoxLayout *mainLayout = nullptr;
 
     QScopedPointer<QHBoxLayout> firstRowContainer;
+
     QScopedPointer<QComboBox> deviceComboBox;
     QScopedPointer<QPushButton> refreshDeviceButton;
     QScopedPointer<QPushButton> debugFragmentButton;
+    QScopedPointer<QComboBox> packageNameComboBox;
+    QScopedPointer<QPushButton> uninstallButton;
+
+    QScopedPointer<QHBoxLayout> secondContainer;
 
     QScopedPointer<QComboBox> accountComboBox;
     QScopedPointer<QPushButton> accountButton;
-    QScopedPointer<QHBoxLayout> secondContainer;
 
     QScopedPointer<QHBoxLayout> thirdRowContainer;
-    QScopedPointer<QPushButton> deeplink;
+
+    QScopedPointer<QPushButton> deeplinkButton;
     QScopedPointer<QLineEdit> deeplinkText;
+
+    QScopedPointer<QLineEdit> customCommandText;
+    QScopedPointer<QPushButton> customCommandButton;
 
     ConfigReopostory *configRepo = nullptr;
     QScopedPointer<Command> command;
@@ -51,7 +59,15 @@ private:
     void showDevices();
     void onRefreshDevicesClicked();
 
+    void showPackageNames();
+
+    void showUninstallButton();
+    void onExcuteUninstall();
+
     void showDeeplink();
     void onExecuteDeepLink();
+
+    void showCustomCommand();
+    void onExecuteCustomCommand();
 };
 #endif // MAINWINDOW_H

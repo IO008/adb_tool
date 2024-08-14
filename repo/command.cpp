@@ -82,3 +82,17 @@ void Command::deeplink(QString device, QString text, QString packageName)
         qDebug() << "Failed to execute deeplink command.";
     }
 }
+
+void Command::customCommand(QString device, QString command)
+{
+    process.start("adb", QStringList() << "-s" << device << "shell" << command);
+    if (!process.waitForFinished())
+    {
+        qDebug() << "Failed to execute custom command. " << command;
+    }
+}
+
+void Command::uninstall(QString device, QString packageName)
+{
+    customCommand(device, "pm uninstall " + packageName);
+}

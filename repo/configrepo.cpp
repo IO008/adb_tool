@@ -38,7 +38,12 @@ void ConfigReopostory::readConfig(const QString &path)
     }
 
     webUrl = obj["webUrl"].toString();
-    packageName = obj["packageName"].toString();
+
+    QJsonArray packageNamesArray = obj["packageNames"].toArray();
+    for (const QJsonValue &value : packageNamesArray)
+    {
+        packageNames.append(value.toString());
+    }
 }
 
 QStringList *ConfigReopostory::getUserNameList()
@@ -63,7 +68,7 @@ QString ConfigReopostory::getPassword(const QString &username)
     return "";
 }
 
-QString ConfigReopostory::getPackageName()
+QStringList ConfigReopostory::getPackageNames()
 {
-    return packageName;
+    return packageNames;
 }

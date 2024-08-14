@@ -16,7 +16,7 @@ private:
     QList<QSharedPointer<Account>> accounts;
     QStringList userNameList;
     QString webUrl;
-    QString packageName;
+    QStringList packageNames;
 
 public:
     ConfigReopostory();
@@ -27,7 +27,7 @@ public:
     QStringList *getUserNameList();
     QString getPassword(const QString &username);
 
-    QString getPackageName();
+    QStringList getPackageNames();
 };
 
 #endif

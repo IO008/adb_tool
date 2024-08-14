@@ -35,25 +35,32 @@ void MainWindow::initUI(QWidget *parent)
     mainLayout = new QVBoxLayout(centerWidget);
 
     firstRowContainer.reset(new QHBoxLayout());
+
     showDevices();
+    showPackageNames();
+    showUninstallButton();
     showDebugFragment();
+
     firstRowContainer->addStretch();
     mainLayout->addLayout(firstRowContainer.data());
 
     secondContainer.reset(new QHBoxLayout());
+
     showAccount();
-    mainLayout->addLayout(secondContainer.data());
+
     secondContainer->addStretch();
     mainLayout->addLayout(secondContainer.data());
 
     thirdRowContainer.reset(new QHBoxLayout());
+
     showDeeplink();
+    showCustomCommand();
+
     thirdRowContainer->addStretch();
     mainLayout->addLayout(thirdRowContainer.data());
 
     mainLayout->addStretch();
     centerWidget->setLayout(mainLayout);
-
     setCentralWidget(centerWidget);
 }
 
@@ -108,6 +115,27 @@ void MainWindow::onRefreshDevicesClicked()
     }
 }
 
+void MainWindow::showPackageNames()
+{
+    packageNameComboBox.reset(new QComboBox());
+    packageNameComboBox->clear();
+    packageNameComboBox->addItems(configRepo->getPackageNames());
+    firstRowContainer->addWidget(packageNameComboBox.data());
+}
+
+void MainWindow::showUninstallButton()
+{
+    uninstallButton.reset(new QPushButton("uninstall"));
+    firstRowContainer->addWidget(uninstallButton.data());
+
+    connect(uninstallButton.data(), &QPushButton::clicked, this, &MainWindow::onExcuteUninstall);
+}
+
+void MainWindow::onExcuteUninstall()
+{
+    command->uninstall(deviceComboBox->currentText(), packageNameComboBox->currentText());
+}
+
 void MainWindow::showDebugFragment()
 {
     debugFragmentButton.reset(new QPushButton("debug fragment"));
@@ -124,14 +152,28 @@ void MainWindow::onDebugFragmentButtonClicked()
 void MainWindow::showDeeplink()
 {
     deeplinkText.reset(new QLineEdit());
-    deeplink.reset(new QPushButton("deeplink"));
+    deeplinkButton.reset(new QPushButton("deeplink"));
     thirdRowContainer->addWidget(deeplinkText.data());
-    thirdRowContainer->addWidget(deeplink.data());
-    connect(deeplink.data(), &QPushButton::clicked, this, &MainWindow::onExecuteDeepLink);
+    thirdRowContainer->addWidget(deeplinkButton.data());
+    connect(deeplinkButton.data(), &QPushButton::clicked, this, &MainWindow::onExecuteDeepLink);
 }
 
 void MainWindow::onExecuteDeepLink()
 {
     QString text = deeplinkText->text();
-    command->deeplink(deviceComboBox->currentText(), text, configRepo->getPackageName());
+    command->deeplink(deviceComboBox->currentText(), text, packageNameComboBox->currentText());
+}
+
+void MainWindow::showCustomCommand()
+{
+    customCommandText.reset(new QLineEdit());
+    customCommandButton.reset(new QPushButton("custom command"));
+    thirdRowContainer->addWidget(customCommandText.data());
+    thirdRowContainer->addWidget(customCommandButton.data());
+    connect(customCommandButton.data(), &QPushButton::clicked, this, &MainWindow::onExecuteCustomCommand);
+}
+
+void MainWindow::onExecuteCustomCommand()
+{
+    command->customCommand(deviceComboBox->currentText(), customCommandText->text());
 }
