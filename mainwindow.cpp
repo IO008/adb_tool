@@ -34,8 +34,22 @@ void MainWindow::initUI(QWidget *parent)
     centerWidget = new QWidget();
     mainLayout = new QVBoxLayout(centerWidget);
 
+    firstRowContainer.reset(new QHBoxLayout());
     showDevices();
+    showDebugFragment();
+    firstRowContainer->addStretch();
+    mainLayout->addLayout(firstRowContainer.data());
+
+    secondContainer.reset(new QHBoxLayout());
     showAccount();
+    mainLayout->addLayout(secondContainer.data());
+    secondContainer->addStretch();
+    mainLayout->addLayout(secondContainer.data());
+
+    thirdRowContainer.reset(new QHBoxLayout());
+    showDeeplink();
+    thirdRowContainer->addStretch();
+    mainLayout->addLayout(thirdRowContainer.data());
 
     mainLayout->addStretch();
     centerWidget->setLayout(mainLayout);
@@ -45,7 +59,6 @@ void MainWindow::initUI(QWidget *parent)
 
 void MainWindow::showAccount()
 {
-    accountContainer.reset(new QHBoxLayout());
     accountButton.reset(new QPushButton("input"));
     accountComboBox.reset(new QComboBox());
 
@@ -53,11 +66,8 @@ void MainWindow::showAccount()
     {
         accountComboBox->addItem(userName);
     }
-    accountContainer.data()->addWidget(accountComboBox.data());
-    accountContainer.data()->addWidget(accountButton.data());
-    mainLayout->addLayout(accountContainer.data());
-
-    accountContainer->addStretch();
+    secondContainer.data()->addWidget(accountComboBox.data());
+    secondContainer.data()->addWidget(accountButton.data());
 
     connect(accountButton.data(), &QPushButton::clicked, this, &MainWindow::onAccountButtonClicked);
 }
@@ -73,7 +83,6 @@ void MainWindow::onAccountButtonClicked()
 
 void MainWindow::showDevices()
 {
-    deviceContainer.reset(new QHBoxLayout());
     deviceComboBox.reset(new QComboBox());
     refreshDeviceButton.reset(new QPushButton("refresh"));
 
@@ -83,11 +92,8 @@ void MainWindow::showDevices()
     {
         deviceComboBox->addItem(device);
     }
-    deviceContainer->addWidget(deviceComboBox.data());
-    deviceContainer->addWidget(refreshDeviceButton.data());
-
-    deviceContainer->addStretch();
-    mainLayout->addLayout(deviceContainer.data());
+    firstRowContainer->addWidget(deviceComboBox.data());
+    firstRowContainer->addWidget(refreshDeviceButton.data());
 
     connect(refreshDeviceButton.data(), &QPushButton::clicked, this, &MainWindow::onRefreshDevicesClicked);
 }
@@ -100,4 +106,32 @@ void MainWindow::onRefreshDevicesClicked()
     {
         deviceComboBox->addItem(device);
     }
+}
+
+void MainWindow::showDebugFragment()
+{
+    debugFragmentButton.reset(new QPushButton("debug fragment"));
+    firstRowContainer->addWidget(debugFragmentButton.data());
+
+    connect(debugFragmentButton.data(), &QPushButton::clicked, this, &MainWindow::onDebugFragmentButtonClicked);
+}
+
+void MainWindow::onDebugFragmentButtonClicked()
+{
+    command->debugFragment(deviceComboBox->currentText());
+}
+
+void MainWindow::showDeeplink()
+{
+    deeplinkText.reset(new QLineEdit());
+    deeplink.reset(new QPushButton("deeplink"));
+    thirdRowContainer->addWidget(deeplinkText.data());
+    thirdRowContainer->addWidget(deeplink.data());
+    connect(deeplink.data(), &QPushButton::clicked, this, &MainWindow::onExecuteDeepLink);
+}
+
+void MainWindow::onExecuteDeepLink()
+{
+    QString text = deeplinkText->text();
+    command->deeplink(deviceComboBox->currentText(), text, configRepo->getPackageName());
 }

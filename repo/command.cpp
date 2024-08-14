@@ -64,3 +64,21 @@ void Command::hideKeyboard(QString device)
 {
     keyEvent(device, "KEYCODE_BACK");
 }
+
+void Command::debugFragment(QString device)
+{
+    process.start("adb", QStringList() << "-s" << device << "shell" << "setprop" << "log.tag.FragmentManager" << "DEBUG");
+    if (!process.waitForFinished())
+    {
+        qDebug() << "Failed to execute debugFragment command.";
+    }
+}
+
+void Command::deeplink(QString device, QString text, QString packageName)
+{
+    process.start("adb", QStringList() << "-s" << device << "shell" << "am" << "start" << "-W" << "-a" << "android.intent.action.VIEW" << "-d" << text << packageName);
+    if (!process.waitForFinished())
+    {
+        qDebug() << "Failed to execute deeplink command.";
+    }
+}

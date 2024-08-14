@@ -7,6 +7,7 @@
 #include <QListView>
 #include <QScopedPointer>
 #include <QComboBox>
+#include <QLineEdit>
 
 #include "repo/configrepo.h"
 #include "repo/command.h"
@@ -23,13 +24,18 @@ private:
     QWidget *centerWidget = nullptr;
     QVBoxLayout *mainLayout = nullptr;
 
-    QScopedPointer<QComboBox> accountComboBox;
-    QScopedPointer<QPushButton> accountButton;
-    QScopedPointer<QHBoxLayout> accountContainer;
-
-    QScopedPointer<QHBoxLayout> deviceContainer;
+    QScopedPointer<QHBoxLayout> firstRowContainer;
     QScopedPointer<QComboBox> deviceComboBox;
     QScopedPointer<QPushButton> refreshDeviceButton;
+    QScopedPointer<QPushButton> debugFragmentButton;
+
+    QScopedPointer<QComboBox> accountComboBox;
+    QScopedPointer<QPushButton> accountButton;
+    QScopedPointer<QHBoxLayout> secondContainer;
+
+    QScopedPointer<QHBoxLayout> thirdRowContainer;
+    QScopedPointer<QPushButton> deeplink;
+    QScopedPointer<QLineEdit> deeplinkText;
 
     ConfigReopostory *configRepo = nullptr;
     QScopedPointer<Command> command;
@@ -39,8 +45,13 @@ private:
 
     void showAccount();
     void onAccountButtonClicked();
+    void showDebugFragment();
+    void onDebugFragmentButtonClicked();
 
     void showDevices();
     void onRefreshDevicesClicked();
+
+    void showDeeplink();
+    void onExecuteDeepLink();
 };
 #endif // MAINWINDOW_H

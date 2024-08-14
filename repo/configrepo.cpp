@@ -36,6 +36,9 @@ void ConfigReopostory::readConfig(const QString &path)
         QSharedPointer<Account> account(new Account(accountObj["username"].toString(), accountObj["password"].toString()));
         accounts.append(account);
     }
+
+    webUrl = obj["webUrl"].toString();
+    packageName = obj["packageName"].toString();
 }
 
 QStringList *ConfigReopostory::getUserNameList()
@@ -58,4 +61,9 @@ QString ConfigReopostory::getPassword(const QString &username)
         }
     }
     return "";
+}
+
+QString ConfigReopostory::getPackageName()
+{
+    return packageName;
 }
