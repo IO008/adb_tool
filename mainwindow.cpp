@@ -10,29 +10,26 @@ MainWindow::MainWindow(QWidget *parent)
     this->resize(800, 600);
     this->setWindowTitle("adb tool");
     init();
-    initUI(parent);
+    initUI();
 }
 
 MainWindow::~MainWindow()
 {
-    delete centerWidget;
-    delete mainLayout;
-    delete configRepo;
 }
 
 void MainWindow::init()
 {
-    configRepo = new ConfigReopostory();
+    configRepo.reset(new ConfigReopostory());
     command.reset(new Command());
 
     QString configPath = QDir::homePath() + "/Documents/self/qt_project/adb_tool/config/config.json";
     configRepo->readConfig(configPath);
 }
 
-void MainWindow::initUI(QWidget *parent)
+void MainWindow::initUI()
 {
-    centerWidget = new QWidget();
-    mainLayout = new QVBoxLayout(centerWidget);
+    centerWidget.reset(new QWidget());
+    mainLayout.reset(new QVBoxLayout(centerWidget.data()));
 
     firstRowContainer.reset(new QHBoxLayout());
 
@@ -61,8 +58,8 @@ void MainWindow::initUI(QWidget *parent)
     mainLayout->addLayout(thirdRowContainer.data());
 
     mainLayout->addStretch();
-    centerWidget->setLayout(mainLayout);
-    setCentralWidget(centerWidget);
+    centerWidget->setLayout(mainLayout.data());
+    setCentralWidget(centerWidget.data());
 }
 
 void MainWindow::showAccount()
@@ -199,4 +196,10 @@ void MainWindow::showCustomCommand()
 void MainWindow::onExecuteCustomCommand()
 {
     command->customCommand(deviceComboBox->currentText(), customCommandText->text());
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    qDebug() << "exit";
+    event->accept();
 }

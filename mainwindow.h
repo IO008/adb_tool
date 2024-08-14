@@ -8,6 +8,7 @@
 #include <QScopedPointer>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QCloseEvent>
 
 #include "repo/configrepo.h"
 #include "repo/command.h"
@@ -21,9 +22,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private:
-    QWidget *centerWidget = nullptr;
-    QVBoxLayout *mainLayout = nullptr;
+    QScopedPointer<QWidget> centerWidget;
+    QScopedPointer<QVBoxLayout> mainLayout;
 
     QScopedPointer<QHBoxLayout> firstRowContainer;
 
@@ -47,13 +51,13 @@ private:
     QScopedPointer<QLineEdit> customCommandText;
     QScopedPointer<QPushButton> customCommandButton;
 
-    ConfigReopostory *configRepo = nullptr;
+    QScopedPointer<ConfigReopostory> configRepo;
     QScopedPointer<Command> command;
 
     QScopedPointer<NetworkManager> networkManager;
 
     void init();
-    void initUI(QWidget *parent);
+    void initUI();
 
     void showAccount();
     void onAccountButtonClicked();
