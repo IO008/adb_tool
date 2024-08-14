@@ -11,6 +11,7 @@
 
 #include "repo/configrepo.h"
 #include "repo/command.h"
+#include "net/networkmanager.h"
 
 class MainWindow : public QMainWindow
 {
@@ -36,6 +37,7 @@ private:
 
     QScopedPointer<QComboBox> accountComboBox;
     QScopedPointer<QPushButton> accountButton;
+    QScopedPointer<QPushButton> otpButton;
 
     QScopedPointer<QHBoxLayout> thirdRowContainer;
 
@@ -48,11 +50,15 @@ private:
     ConfigReopostory *configRepo = nullptr;
     QScopedPointer<Command> command;
 
+    QScopedPointer<NetworkManager> networkManager;
+
     void init();
     void initUI(QWidget *parent);
 
     void showAccount();
     void onAccountButtonClicked();
+    void showOTPButton();
+    void onExcuteOTP();
     void showDebugFragment();
     void onDebugFragmentButtonClicked();
 
@@ -69,5 +75,8 @@ private:
 
     void showCustomCommand();
     void onExecuteCustomCommand();
+
+private slots:
+    void requestFinished(const QString &result);
 };
 #endif // MAINWINDOW_H

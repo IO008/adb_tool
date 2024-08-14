@@ -47,6 +47,7 @@ void MainWindow::initUI(QWidget *parent)
     secondContainer.reset(new QHBoxLayout());
 
     showAccount();
+    showOTPButton();
 
     secondContainer->addStretch();
     mainLayout->addLayout(secondContainer.data());
@@ -86,6 +87,28 @@ void MainWindow::onAccountButtonClicked()
     command->nextFocus(deviceComboBox->currentText());
     command->inputText(deviceComboBox->currentText(), configRepo->getPassword(accountComboBox->currentText()));
     command->hideKeyboard(deviceComboBox->currentText());
+}
+
+void MainWindow::showOTPButton()
+{
+    networkManager.reset(new NetworkManager());
+    otpButton.reset(new QPushButton("get otp code"));
+    secondContainer->addWidget(otpButton.data());
+
+    connect(otpButton.data(), &QPushButton::clicked, this, &MainWindow::onExcuteOTP);
+    connect(networkManager.data(), &NetworkManager::requestFinished, this, &MainWindow::requestFinished);
+}
+
+void MainWindow::requestFinished(const QString &result)
+{
+    otpButton->setEnabled(true);
+    qDebug() << "MainWindow requestFinished" << result;
+}
+
+void MainWindow::onExcuteOTP()
+{
+    otpButton->setEnabled(false);
+    networkManager->makeRequest(QUrl("https://www.google.com"));
 }
 
 void MainWindow::showDevices()

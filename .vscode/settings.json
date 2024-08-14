@@ -59,6 +59,9 @@
         "vector": "cpp",
         "algorithm": "cpp",
         "qsharedpointer": "cpp",
-        "qstring": "cpp"
+        "qstring": "cpp",
+        "qwaitcondition": "cpp",
+        "qthread": "cpp",
+        "qdebug": "cpp"
     }
 }
