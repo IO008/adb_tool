@@ -37,7 +37,16 @@ void ConfigReopostory::readConfig(const QString &path)
         accounts.append(account);
     }
 
-    webUrl = obj["webUrl"].toString();
+    baseUrl = obj["baseUrl"].toString();
+    qDebug() << "baseUrl : " << baseUrl;
+    otpPath = obj["otpPath"].toString();
+    qDebug() << "otpPath : " << otpPath;
+    QJsonArray otpTypeArray = obj["otpTypes"].toArray();
+    foreach (const QJsonValue &value, otpTypeArray)
+    {
+        otpTypes.append(value.toString());
+        qDebug() << "otpType : " << value.toString();
+    }
 
     QJsonArray packageNamesArray = obj["packageNames"].toArray();
     for (const QJsonValue &value : packageNamesArray)
@@ -71,4 +80,17 @@ QString ConfigReopostory::getPassword(const QString &username)
 QStringList ConfigReopostory::getPackageNames()
 {
     return packageNames;
+}
+
+QString ConfigReopostory::getOptUrl(const QString &userName)
+{
+    foreach (const QString &otpType, otpTypes)
+    {
+        if (userName.contains(otpType))
+        {
+            return baseUrl + otpPath.replace("${otpTypes}", otpType);
+        }
+    }
+
+    return "";
 }

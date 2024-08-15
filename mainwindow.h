@@ -12,6 +12,7 @@
 
 #include "repo/configrepo.h"
 #include "repo/command.h"
+#include "repo/otp_code_repo.h"
 #include "net/networkmanager.h"
 
 class MainWindow : public QMainWindow
@@ -53,6 +54,7 @@ private:
 
     QScopedPointer<ConfigReopostory> configRepo;
     QScopedPointer<Command> command;
+    QScopedPointer<OtpCodeRepo> otpCodeRepo;
 
     QScopedPointer<NetworkManager> networkManager;
 

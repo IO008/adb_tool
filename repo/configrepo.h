@@ -15,7 +15,11 @@ class ConfigReopostory
 private:
     QList<QSharedPointer<Account>> accounts;
     QStringList userNameList;
-    QString webUrl;
+
+    QString baseUrl;
+    QString otpPath;
+    QStringList otpTypes;
+
     QStringList packageNames;
 
 public:
@@ -28,6 +32,8 @@ public:
     QString getPassword(const QString &username);
 
     QStringList getPackageNames();
+
+    QString getOptUrl(const QString &userName);
 };
 
 #endif

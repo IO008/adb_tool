@@ -96,3 +96,8 @@ void Command::uninstall(QString device, QString packageName)
 {
     customCommand(device, "pm uninstall " + packageName);
 }
+
+void Command::enter(QString device)
+{
+    keyEvent(device, "KEYCODE_ENTER");
+}

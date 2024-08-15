@@ -24,6 +24,7 @@ public:
     void deeplink(QString device, QString text, QString packageName);
     void customCommand(QString device, QString command);
     void uninstall(QString device, QString packageName);
+    void enter(QString device);
 };
 
 #endif

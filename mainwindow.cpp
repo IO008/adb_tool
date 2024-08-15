@@ -84,6 +84,7 @@ void MainWindow::onAccountButtonClicked()
     command->nextFocus(deviceComboBox->currentText());
     command->inputText(deviceComboBox->currentText(), configRepo->getPassword(accountComboBox->currentText()));
     command->hideKeyboard(deviceComboBox->currentText());
+    command->enter(deviceComboBox->currentText());
 }
 
 void MainWindow::showOTPButton()
@@ -99,13 +100,24 @@ void MainWindow::showOTPButton()
 void MainWindow::requestFinished(const QString &result)
 {
     otpButton->setEnabled(true);
-    qDebug() << "MainWindow requestFinished" << result;
+    QString code = otpCodeRepo->getOtpCode(accountComboBox->currentText(), result);
+    if (code.isEmpty())
+    {
+        qDebug() << "OTP code is empty";
+        return;
+    }
+    command->nextFocus(deviceComboBox->currentText());
+    command->inputText(deviceComboBox->currentText(), code);
+    command->enter(deviceComboBox->currentText());
+    qDebug() << "MainWindow requestFinished result " << result << " code " << code;
 }
 
 void MainWindow::onExcuteOTP()
 {
+    QString url = configRepo->getOptUrl(accountComboBox->currentText());
+    qDebug() << "url : " << url;
     otpButton->setEnabled(false);
-    networkManager->makeRequest(QUrl("https://www.google.com"));
+    networkManager->makeRequest(QUrl(url));
 }
 
 void MainWindow::showDevices()

@@ -21,6 +21,8 @@ set(PROJECT_SOURCES
         repo/configrepo.cpp
         repo/command.h
         repo/command.cpp
+        repo/otp_code_repo.h
+        repo/otp_code_repo.cpp
         net/networkmanager.h
         net/networkmanager.cpp
 )
